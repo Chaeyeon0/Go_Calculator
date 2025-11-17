@@ -1,6 +1,8 @@
 package gocalculator
 
 import (
+	"errors"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -10,18 +12,32 @@ func Add(input string) (int, error) {
 		return 0, nil
 	}
 
-	// 쉼표 또는 콜론으로 분리
-	parts := strings.FieldsFunc(input, func(r rune) bool {
-		return r == ',' || r == ':'
-	})
+	delimiters := ",|:" // 기본 구분자
+	numbers := input
+
+	// 커스텀 구분자 형식 검사
+	if strings.HasPrefix(input, "//") {
+		re := regexp.MustCompile(`^//(.)\n(.*)`)
+		matches := re.FindStringSubmatch(input)
+		if len(matches) == 3 {
+			delimiters = regexp.QuoteMeta(matches[1])
+			numbers = matches[2]
+		} else {
+			return 0, errors.New("잘못된 구분자 형식입니다")
+		}
+	}
+
+	re := regexp.MustCompile(delimiters)
+	tokens := re.Split(numbers, -1)
 
 	sum := 0
-	for _, p := range parts {
-		num, err := strconv.Atoi(strings.TrimSpace(p))
+	for _, t := range tokens {
+		num, err := strconv.Atoi(strings.TrimSpace(t))
 		if err != nil {
 			return 0, err
 		}
 		sum += num
 	}
+
 	return sum, nil
 }
