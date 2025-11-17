@@ -36,6 +36,9 @@ func Add(input string) (int, error) {
 		if err != nil {
 			return 0, err
 		}
+		if num < 0 {
+			return 0, errors.New("음수는 입력할 수 없습니다")
+		}
 		sum += num
 	}
 

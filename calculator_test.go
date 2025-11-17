@@ -21,3 +21,10 @@ func TestAdd_CustomDelimiter(t *testing.T) {
 		t.Errorf("결과가 %d입니다. 기대값은 6이에요.", result)
 	}
 }
+
+func TestAdd_NegativeNumber(t *testing.T) {
+	_, err := Add("1,-2,3")
+	if err == nil {
+		t.Errorf("음수가 들어가면 에러가 발생합니다.")
+	}
+}
