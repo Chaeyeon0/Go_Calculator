@@ -25,3 +25,24 @@ func TestValidateNumbers_Negative(t *testing.T) {
 		t.Errorf("음수 입력에 에러가 발생해야 합니다.")
 	}
 }
+
+func TestValidateNumbers_AlphabetIncluded(t *testing.T) {
+	_, err := ValidateNumbers([]string{"1", "a", "3"})
+	if err == nil {
+		t.Errorf("문자 입력은 에러가 발생해야 합니다.")
+	}
+}
+
+func TestValidateNumbers_TrailingDelimiter(t *testing.T) {
+	_, err := ValidateNumbers([]string{"1", "2", ""})
+	if err == nil {
+		t.Errorf("마지막 구분자 입력은 에러가 발생해야 합니다.")
+	}
+}
+
+func TestValidateNumbers_ContinuousDelimiter(t *testing.T) {
+	_, err := ValidateNumbers([]string{"1", "", "2"})
+	if err == nil {
+		t.Errorf("연속된 구분자 입력은 에러가 발생해야 합니다.")
+	}
+}
